@@ -16,3 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from . import models
+from openerp import SUPERUSER_ID
+
+
+def set_pos_line_taxes(cr, registry):
+    """Copy the product taxes to the pos.line"""
+    cr.execute("""insert into pline_tax_rel
+                    select l.id, t.id
+                    from pos_order_line l
+                    join pos_order o on l.order_id = o.id
+                    join product_product p on l.product_id = p.id
+                    join product_template pt on pt.id = p.product_tmpl_id
+                    join product_taxes_rel rel on rel.prod_id = pt.id
+                    join account_tax t on rel.tax_id = t.id
+                    where t.company_id = o.company_id""")
+    registry['pos.order']._install_tax_detail(cr, SUPERUSER_ID)

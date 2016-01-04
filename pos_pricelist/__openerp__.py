@@ -18,25 +18,28 @@
 ##############################################################################
 {
     'name': 'POS Pricelist',
-    'version': '1.0.0',
+    'version': '8.0.1.2.0',
     'category': 'Point Of Sale',
     'sequence': 1,
     'author': "Adil Houmadi @Taktik,Odoo Community Association (OCA)",
     'summary': 'Pricelist for Point of sale',
-    'description': """
-New feature for the Point Of Sale:
-=============================================
-    Add support for pricelist on the point of sale
-    """,
     'depends': [
         "point_of_sale",
     ],
     'data': [
         "views/pos_pricelist_template.xml",
+        "views/pos_pricelist_views.xml",
+        "views/point_of_sale_view.xml",
+        "report/report_receipt.xml",
+        "security/ir.model.access.csv",
     ],
     'demo': [
         'demo/pos_pricelist_demo.yml',
     ],
+    'qweb': [
+        'static/src/xml/pos.xml'
+    ],
+    'post_init_hook': "set_pos_line_taxes",
     'installable': True,
     'application': False,
     'auto_install': False,
